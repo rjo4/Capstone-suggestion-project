@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+#hi 
 
 # ── Placeholder course list (swap these out later) ───────────────────────────
 ALL_COURSES = [
