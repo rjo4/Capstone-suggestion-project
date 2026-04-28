@@ -1,59 +1,94 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-# ── Placeholder course list (swap these out later) ───────────────────────────
-*this is from my plan o f study, but it should be doing the trick for now 
-ALL_COURSES = [
-    "Engineering Orientation",
-    "Foundations of Design 1",
-    "Programming 1",
-    "Calculus 1",
-    "Principles of Entrepreneurship",
-    "Science Elective",
-    "Foundations of Design 2",
-    "Digital Logic",
-    "Calculus 2",
-    "Writing Seminar",
-    "Electric Circuits",
-    "Digital Signal Processing",
-    "Differential Equations",
-    "Physics 1",
-    "Physics 1 Laboratory",
-    "Maker Engineering",
-    "Electronics",
-    "Physics 2",
-    "Physics 2 Laboratory",
-    "Professional Ethics",
-    "Calculus 3",
-    "Signals and Systems",
-    "Applied Electromagnetics",
-    "Embedded Real-Time Apps",
-    "Statistics for Sc. & Engr. (2501)",
-    "Gen Ed Elective 1",
-    "Control & Automation",
-    "Communication Systems",
-    "Machines & Power Electronics",
-    "Project Development",
-    "Gen Ed Elective 2",
-    "Capstone Design Exp. 1",
-    "Networks & Data Comm.",
-    "Power Systems",
-    "EE Technical Elective 1",
-    "EE Technical Elective 2",
-    "Gen Ed Elective 3 (GEN 8)",
-    "Capstone Design Exp. 2",
-    "EE Technical Elective 3",
-    "Engineering Elective",
-    "Gen Ed Elective 4 (GEN 6)",
-    "Gen Ed Elective 5 (GEN 10)",
-]
+# ── Theme Colors ───────────────────────────────────────────────────────────────
+BG       = "#f0f4f8"
+DARK     = "#1a2332"
+WHITE    = "#ffffff"
+CARD_BG  = "#ffffff"
+MID_DARK = "#2d3f55"
+ACCENT   = "#3b82f6"
+GREEN    = "#10b981"
+PURPLE   = "#7c3aed"
+AMBER    = "#f59e0b"
+RED      = "#ef4444"
+MUTED    = "#6b7280"
+LIGHT_BG = "#f8fafc"
+
+# ── Engineering Courses Organized by Category ──────────────────────────────────
+COURSES_BY_CATEGORY = {
+    "Basic Engineering": [
+        "Engineering Orientation",
+        "Foundations of Design 1",
+        "Foundations of Design 2",
+        "Statistics",
+        "Engineering Traditions and Culture in Rome",
+        "Professional Practice",
+        "Industrial Controllers",
+    ],
+    "Electrical, Computer Engineering & Computer Science": [
+        "Introduction to Programming",
+        "Electric Circuits",
+        "Web Development",
+        "Data Structures and Algorithms",
+        "Research Experience",
+        "Big Data Analytics",
+        "Applied Electromagnetics",
+        "Signals and Systems",
+        "Embedded Hardware-Software Code Design",
+        "Embedded Real-Time Applications",
+        "Software Development",
+        "UI/UX Design",
+        "Computer Architecture",
+        "Networks and Data Communication",
+        "Professional Certification Preparation",
+        "Power Systems",
+        "Information Science",
+        "Advanced Electronics",
+        "Theory of Computation",
+    ],
+    "Civil Engineering": [
+        "Surveying",
+        "Surveying Lab",
+        "Environmental Engineering",
+        "Geotechnical Engineering",
+        "Structural Analysis",
+        "Transportation Engineering",
+        "Water Resources Engineering",
+        "CFE Fundamentals",
+        "CFE Design Seminar 1",
+    ],
+    "Mechanical Engineering": [
+        "Engineering Material Science",
+        "Thermodynamics",
+        "Design for Manufacturing",
+        "Computer Applications",
+        "Fundamentals of Experimentation",
+        "Machine Component Design",
+        "3-D Modeling and Design",
+        "Dynamic Systems Modeling",
+        "Fluid Mechanics",
+        "Sensors and Measurements",
+        "Process of Design",
+        "Mechatronics",
+        "Computational Fluid Dynamics",
+        "Advanced Thermodynamics",
+        "Engineering Analysis",
+    ],
+}
+
+# ── Flat list of all courses as "Category | Course Name" strings ───────────────
+ALL_COURSES = []
+for category, courses in COURSES_BY_CATEGORY.items():
+    for course in courses:
+        ALL_COURSES.append(f"{category}  |  {course}")
 
 
 class StudentTrackerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Student Course Tracker")
-        self.root.geometry("700x620")
+        self.root.geometry("800x660")
         self.root.configure(bg="#f0f2f5")
         self.root.resizable(True, True)
 
@@ -62,7 +97,7 @@ class StudentTrackerApp:
 
         self._build_ui()
 
-    # ── UI Construction ───────────────────────────────────────────────────────
+    # ── UI Construction ────────────────────────────────────────────────────────
 
     def _build_ui(self):
         canvas = tk.Canvas(self.root, bg="#f0f2f5", highlightthickness=0)
@@ -125,7 +160,7 @@ class StudentTrackerApp:
             bg="#2c3e50",
         ).pack()
 
-    # ── Name Card ─────────────────────────────────────────────────────────────
+    # ── Name Card ──────────────────────────────────────────────────────────────
 
     def _build_name_card(self):
         body = self._card("Student Name")
@@ -142,7 +177,7 @@ class StudentTrackerApp:
 
         body.columnconfigure(0, weight=1)
 
-    # ── Courses Card ──────────────────────────────────────────────────────────
+    # ── Courses Card ───────────────────────────────────────────────────────────
 
     def _build_courses_card(self):
         body = self._card("Classes Already Taken")
@@ -152,6 +187,12 @@ class StudentTrackerApp:
             body,
             text="Select each course you have already completed:",
             font=("Helvetica", 11), bg="white", fg="#374151",
+        ).pack(anchor="w", pady=(0, 4))
+
+        tk.Label(
+            body,
+            text="Courses are listed as  \"Category  |  Course Name\"",
+            font=("Helvetica", 9, "italic"), bg="white", fg="#6b7280",
         ).pack(anchor="w", pady=(0, 10))
 
         self.courses_container = tk.Frame(body, bg="white")
@@ -173,7 +214,7 @@ class StudentTrackerApp:
         self._add_course_row()
         self._add_course_row()
 
-    # ── Save Bar ──────────────────────────────────────────────────────────────
+    # ── Save Bar ───────────────────────────────────────────────────────────────
 
     def _build_save_bar(self):
         bar = tk.Frame(self.inner, bg="#f0f2f5", pady=14, padx=20)
@@ -195,7 +236,7 @@ class StudentTrackerApp:
         )
         self.save_status.pack(side="left", padx=14)
 
-    # ── Course Row Logic ──────────────────────────────────────────────────────
+    # ── Course Row Logic ───────────────────────────────────────────────────────
 
     def _add_course_row(self):
         row_index = len(self.course_rows) + 1
@@ -213,7 +254,7 @@ class StudentTrackerApp:
         var = tk.StringVar(value="")
         combo = ttk.Combobox(
             row_frame, textvariable=var,
-            state="readonly", font=("Helvetica", 10), width=28,
+            state="readonly", font=("Helvetica", 10), width=52,
         )
         combo.pack(side="left", padx=(0, 10))
 
@@ -255,7 +296,7 @@ class StudentTrackerApp:
     def _refresh_all_combos(self):
         """
         Rebuild each combobox's option list so it only shows courses
-        that haven't been chosen by a *different* row.
+        that haven't been chosen by a different row.
         """
         chosen = {row["var"].get() for row in self.course_rows if row["var"].get()}
 
@@ -278,7 +319,7 @@ class StudentTrackerApp:
             else:
                 row["btn"].config(state="normal", bg="#ef4444", cursor="hand2")
 
-    # ── Save ──────────────────────────────────────────────────────────────────
+    # ── Save ───────────────────────────────────────────────────────────────────
 
     def _save_all(self):
         name = self.name_var.get().strip()
@@ -291,18 +332,21 @@ class StudentTrackerApp:
             messagebox.showwarning("No Courses", "Please select at least one course before saving.")
             return
 
+        # Format for display: just the course name (strip the category prefix)
+        display_courses = [c.split("  |  ")[-1] for c in selected_courses]
+
         summary = (
             f"Saved successfully!\n\n"
             f"Student: {name}\n"
-            f"Courses ({len(selected_courses)}): {', '.join(selected_courses)}"
+            f"Courses ({len(display_courses)}): {', '.join(display_courses)}"
         )
         messagebox.showinfo("Saved", summary)
         self.save_status.config(
-            text=f"✔  Saved {name} · {len(selected_courses)} course(s)"
+            text=f"✔  Saved {name} · {len(display_courses)} course(s)"
         )
 
 
-# ── Entry point ───────────────────────────────────────────────────────────────
+# ── Entry Point ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     root = tk.Tk()
